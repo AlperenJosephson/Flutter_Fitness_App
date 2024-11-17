@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper _instance = DatabaseHelper._internal();
+  static final DatabaseHelper _instance = DatabaseHelper._internal();   // aynı ağlantı tekrar tekrar oluşmasını engeller
   factory DatabaseHelper() => _instance;
 
   static Database? _database;
@@ -12,9 +12,9 @@ class DatabaseHelper {
 
 
   // Database'e erişim sağlayan getter
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
+  Future<Database> get database async {   // veritabanına erişim sağlayan getter
+    if (_database != null) return _database!; // database zaten bağlı ise onu döndür
+    _database = await _initDatabase();    // veritabanı bağlantısını başlatır
     return _database!;
   }
 
@@ -44,9 +44,9 @@ class DatabaseHelper {
   }
 
   // Kullanıcı ekleme metodu
-  Future<int> insertUser(Map<String, dynamic> user) async {
+  Future<int> insertUser(Map<String, dynamic> user) async { // user adında veri gelir (name,mail,pass)
     final db = await database;
-    return await db.insert(
+    return await db.insert(   // user verisini users tablosuna ekler
       'users',
       user,
       conflictAlgorithm: ConflictAlgorithm.fail, // UNIQUE ihlali durumunda hata fırlatır
@@ -54,7 +54,7 @@ class DatabaseHelper {
   }
 
   // Kullanıcı güncelleme
-  Future<int> updateUser(int id, Map<String, dynamic> user) async {
+  /*Future<int> updateUser(int id, Map<String, dynamic> user) async {
     final db = await database;
     return await db.update(
       'users',
@@ -62,33 +62,29 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
-  }
+  }*/
 
   // kullanıcıların doğrulanması
   Future<bool> authenticateUser(String email, String password) async {
   final db = await database;
-  final result = await db.query(
-    'users',
-    where: 'email = ? AND password = ?',
-    whereArgs: [email, password],
+  final result = await db.query(  // users tablosunda mail ve şifreye göre kullanıcı arar db.query burada SELECT işlevinde
+    'users',  // users tablosundaki tüm satırları döndürür
+    where: 'email = ? AND password = ?',  // filtre uygular
+    whereArgs: [email, password],   // buradaki ilk ? email ikincisi ise passwordu ifade eder 
   );
 
   // Kullanıcı bulunduysa liste boş olmayacaktır
   return result.isNotEmpty;
 }
 
-void printDatabasePath() async {
+/*void printDatabasePath() async {
   final databasePath = await getDatabasesPath();
   print("Database path: $databasePath");
-}
+}*/
 
   // tüm kullanıcıları getirme
   Future<List<Map<String, dynamic>>> getAllUsers() async {
   final db = await database;
   return await db.query('users'); // 'users' tablosundaki tüm verileri getirir
 }
-
-
-
-
 }

@@ -12,67 +12,22 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();  // Form widgetının durumunu kontrol eder
+  final TextEditingController _emailController = TextEditingController();   // email verisini tutar
+  final TextEditingController _passwordController = TextEditingController();  // şifreyi tutar
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
 
 
   void _login() async{ // giriş yapma işlemi 
-    if (_formKey.currentState!.validate()) {
-      final email = _emailController.text;
-      final password = _passwordController.text;
+    if (_formKey.currentState!.validate()) {  // tüm validator işlemleri doğruysa işlemlere başla
+      final email = _emailController.text;  // girilen mail adresini değişkene atar
+      final password = _passwordController.text;  // girilen şifre değerini değişkene atar
 
       // Kullanıcı doğrulama
-      bool isAuthenticated = await _dbHelper.authenticateUser(email, password);
+      bool isAuthenticated = await _dbHelper.authenticateUser(email, password); // gelen verileri doğrulamaya gönderir
 
-      /*if (isAuthenticated) {// Giriş başarılı ise
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Giriş Başarılı')),
-        );
-        //home_screen.dart a yönlendirme
-        Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Hatalı Mail veya Şifre')),
-        );
-      }*/
-      /*
-      if (isAuthenticated) {
-        // Kullanıcı bilgilerini al
-        final users = await _dbHelper.getAllUsers();
-        final user = users.firstWhere(
-          (u) => u['email'] == email,
-          orElse: () => Null,
-        );
-
-
-        /*ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login successful')),
-        );*/
-
-        // Ana sayfaya yönlendir ve kullanıcı bilgilerini gönder
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeScreen(
-              username: user['username'],
-              email: user['email'],
-            ),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid email or password')),
-        );
-      }
-      */
-
-        if (isAuthenticated) {
+        if (isAuthenticated) {  // eğer doğru ise
         try {
         // Kullanıcı bilgilerini al
         final users = await _dbHelper.getAllUsers();
@@ -88,54 +43,53 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         );
-        } catch (e) {
-        // Eğer kullanıcı bulunamazsa, hata yakalanır
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User not found in database.')),
-        );
+        } catch (e) { // Eğer kullanıcı bulunamazsa, hata yakalanır
+        
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Kullanıcı Kayıtlı Değil.')),
+          );
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid email or password')),
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Geçersiz Mail veya Şifre')),
         );
       }
     }
   }
 
-  void _goToRegister() {
-    // Register ekranına yönlendir
-    Navigator.push(
+  void _goToRegister() {  // Register ekranına yönlendir 
+    Navigator.push( // navigator ile manuel olarak register_screene gönderir
       context,
       MaterialPageRoute(builder: (context) => const RegisterScreen()),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+  @override // build metodu override edilerek tekrardan kullanılır
+  Widget build(BuildContext context) {  // Ui oluşturma işlemi burada gerçekleşir buildin içinde
+    return Scaffold(  // temel ekran yapısı
+      appBar: AppBar( // başlık çubuğu
         title: const Text('Giriş Alani'),
       ),
-      body: Padding(
+      body: Padding(  // bodydeki boşlukları belirtir
         padding: const EdgeInsets.all(16.0),
-        child: Form(
+        child: Form(  // giriş bilgilerini doğrulamak için kullanılır
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
+              TextFormField(  // kullanıcı mail ve şifresini almak için
                 controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                validator: (value) {    // kullanıcı girişini kontrol eder
+                  if (value == null || value.isEmpty) {   // eğer boşsa veya nullsa
+                    return 'Lütfen Mail adresinizi girin';
                   }
-                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Enter a valid email address';
+                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {  // mail adresinin şeklini inceler
+                    return 'Geçerli bir mail adresi girin';
                   }
                   return null;
                 },
@@ -144,27 +98,27 @@ class _LoginScreenState extends State<LoginScreen> {
               TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  labelText: 'Password',
+                  labelText: 'Şifre',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return 'Lütfen Şifrenizi girin';
                   }
                   if (value.length < 4) {
-                    return 'Password must be at least 4 characters long';
+                    return 'Şifre en az 4 karakterden oluşmalıdır';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _login,
+              ElevatedButton(     
+                onPressed: _login,  // basıldığında _login metodunu çağırır
                 child: const Text('Login'),
               ),
-              TextButton(
-                onPressed: _goToRegister,
+              TextButton(   // yazı şeklinde buton
+                onPressed: _goToRegister, // basıldığında register sayfasına yönlendiren metodu çağırır
                 child: const Text('Hesabınız yok mu? Kayıt Ol!!!'),
               ),
             ],
@@ -174,55 +128,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-/*
-class PasswordRecoveryDialog extends StatefulWidget {
-  @override
-  _PasswordRecoveryDialogState createState() => _PasswordRecoveryDialogState();
-}
-
-class _PasswordRecoveryDialogState extends State<PasswordRecoveryDialog> {
-  final TextEditingController _recoveryEmailController = TextEditingController();
-
-  void _sendRecoveryEmail() {
-    if (_recoveryEmailController.text.isNotEmpty &&
-        RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(_recoveryEmailController.text)) {
-      // Send recovery email logic
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password recovery email sent')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Enter a valid email address')),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Recover Password'),
-      content: TextField(
-        controller: _recoveryEmailController,
-        decoration: InputDecoration(
-          labelText: 'Enter your email',
-          border: OutlineInputBorder(),
-        ),
-        keyboardType: TextInputType.emailAddress,
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _sendRecoveryEmail,
-          child: Text('Send'),
-        ),
-      ],
-    );
-  }
-}*/
