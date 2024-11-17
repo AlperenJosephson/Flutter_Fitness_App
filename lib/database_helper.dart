@@ -77,5 +77,18 @@ class DatabaseHelper {
   return result.isNotEmpty;
 }
 
+void printDatabasePath() async {
+  final databasePath = await getDatabasesPath();
+  print("Database path: $databasePath");
+}
+
+  // tüm kullanıcıları getirme
+  Future<List<Map<String, dynamic>>> getAllUsers() async {
+  final db = await database;
+  return await db.query('users'); // 'users' tablosundaki tüm verileri getirir
+}
+
+
+
 
 }

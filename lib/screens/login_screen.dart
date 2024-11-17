@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'register_screen.dart';
 import '/database_helper.dart';
-import 'home_screen.dart';
-
+import 'package:flutter_project_1/screens/home_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -18,6 +17,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
+
+
   void _login() async{ // giriş yapma işlemi 
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text;
@@ -26,18 +27,76 @@ class _LoginScreenState extends State<LoginScreen> {
       // Kullanıcı doğrulama
       bool isAuthenticated = await _dbHelper.authenticateUser(email, password);
 
-      if (isAuthenticated) {// Giriş başarılı ise
+      /*if (isAuthenticated) {// Giriş başarılı ise
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Giriş Başarılı')),
         );
         //home_screen.dart a yönlendirme
-        /*Navigator.pushReplacement(
+        Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
-      );*/
+      );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Hatalı Mail veya Şifre')),
+        );
+      }*/
+      /*
+      if (isAuthenticated) {
+        // Kullanıcı bilgilerini al
+        final users = await _dbHelper.getAllUsers();
+        final user = users.firstWhere(
+          (u) => u['email'] == email,
+          orElse: () => Null,
+        );
+
+
+        /*ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login successful')),
+        );*/
+
+        // Ana sayfaya yönlendir ve kullanıcı bilgilerini gönder
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(
+              username: user['username'],
+              email: user['email'],
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid email or password')),
+        );
+      }
+      */
+
+        if (isAuthenticated) {
+        try {
+        // Kullanıcı bilgilerini al
+        final users = await _dbHelper.getAllUsers();
+        final user = users.firstWhere((u) => u['email'] == email);
+
+        // Ana sayfaya yönlendir ve kullanıcı bilgilerini gönder
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(
+              username: user['username'],
+              email: user['email'],
+            ),
+          ),
+        );
+        } catch (e) {
+        // Eğer kullanıcı bulunamazsa, hata yakalanır
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User not found in database.')),
+        );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid email or password')),
         );
       }
     }
@@ -55,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Giriş Alanı'),
+        title: const Text('Giriş Alani'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
