@@ -22,6 +22,14 @@ class MyApp extends StatelessWidget { // stateless widgetlar burada olacaklar
       routes: {   // rota burada belirtlir
         '/login': (context) => const LoginScreen(),   // /Login rotasında LoginScreen widgetı oluşturulur
         '/home': (context) => const HomeScreen(username: 'TestUser', email: 'test@example.com'), // Dummy data
+        //'/exercises': (context) => const ExercisesScreen(),
+        //'/meal_plan': (context) => const MealPlanScreen(),
+        //'/favorites': (context) => const FavoritesScreen(),
+        //'/profile': (context) => const ProfileScreen(),
+
+
+
+
       },
     
     );

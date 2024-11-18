@@ -5,54 +5,90 @@ class HomeScreen extends StatelessWidget {
   final String email;
 
   const HomeScreen({
-    Key? key,
+    super.key,
     required this.username,
     required this.email,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Screen'),
+        title: const Text('Ana Sayfa' /*, style: const TextStyle(backgroundColor: Color.fromARGB(100, 51, 153, 255))*/),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () {
-              // Geri giriş ekranına dön
+              // Çıkış Yap
               Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding:  EdgeInsets.zero,
+          children: [
+            // Drawer başlığı
+            UserAccountsDrawerHeader(accountName: Text(username), accountEmail: Text(email),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Text(
+                  username[0].toUpperCase(),
+                  style: const TextStyle(fontSize: 40.0),
+                ),
+              ),
+            ),
+
+            // Menü öğeleri
+            ListTile(
+              leading: const Icon(Icons.fitness_center),
+              title: const Text('Egzerizler'),
+              onTap: (){
+                // egzersiz ekranına yönlendir
+                Navigator.pushNamed(context, '/exercises');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.restaurant_menu),
+              title: const Text('Beslenme Alanı'),
+              onTap: (){
+                // egzersiz ekranına yönlendir
+                Navigator.pushNamed(context, '/meal_plan');
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.favorite),
+              title: const Text('Favoriler'),
+              onTap: () {
+                // Favoriler ekranına yönlendir
+                Navigator.pushNamed(context, '/favorites');
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Kişisel Bilgiler'),
+              onTap: () {
+                // Kişisel Bilgiler ekranına yönlendir
+                Navigator.pushNamed(context, '/profile');
+              },
+            ),
+          ],
+        ),
+      ),
+      
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Welcome, $username!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Hoşgeldin, $username!',
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
-            Text(
-              'Email: $email',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 24),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 10, // Örnek veri sayısı
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text('Task ${index + 1}'),
-                    subtitle: Text('Details for task ${index + 1}'),
-                    leading: Icon(Icons.task),
-                    trailing: Icon(Icons.chevron_right),
-                  );
-                },
-              ),
-            ),
+            const SizedBox(height: 24),            
           ],
         ),
       ),
