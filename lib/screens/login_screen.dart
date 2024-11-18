@@ -66,7 +66,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override // build metodu override edilerek tekrardan kullanılır
   Widget build(BuildContext context) {  // Ui oluşturma işlemi burada gerçekleşir buildin içinde
+    GestureDetector(
+      onTap: () {
+      FocusScope.of(context).unfocus(); // Tüm odakları kaldırır
+    });
+    
     return Scaffold(  // temel ekran yapısı
+      resizeToAvoidBottomInset: true,
       appBar: AppBar( // başlık çubuğu
         title: const Text('Giriş Alani'),
       ),
@@ -78,12 +84,14 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(  // kullanıcı mail ve şifresini almak için
+                
+                keyboardType: TextInputType.emailAddress,
                 controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.emailAddress,
+                               
                 validator: (value) {    // kullanıcı girişini kontrol eder
                   if (value == null || value.isEmpty) {   // eğer boşsa veya nullsa
                     return 'Lütfen Mail adresinizi girin';
