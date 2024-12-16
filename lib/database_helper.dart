@@ -40,7 +40,7 @@ class DatabaseHelper {
         password TEXT NOT NULL
       )
     ''');
-    print("Database and users table created.");
+    //print("Database and users table created.");
   }
 
   // Kullanıcı ekleme metodu
