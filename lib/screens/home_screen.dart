@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Beslenme Alanı'),
               onTap: (){
                 // egzersiz ekranına yönlendir
-                Navigator.pushNamed(context, '/meal_plan');
+                Navigator.pushNamed(context, '/nutrition');
               },
             ),
 

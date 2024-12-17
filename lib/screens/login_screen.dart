@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'register_screen.dart';
 import '/database_helper.dart';
 import 'package:flutter_project_1/screens/home_screen.dart';
-
+import 'user_session.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,6 +32,12 @@ class _LoginScreenState extends State<LoginScreen> {
         // Kullanıcı bilgilerini al
         final users = await _dbHelper.getAllUsers();
         final user = users.firstWhere((u) => u['email'] == email);
+        
+        userSession.setUser(
+          email: user['email'], 
+          username: user['username'],
+        );
+
 
         // Ana sayfaya yönlendir ve kullanıcı bilgilerini gönder
         Navigator.pushReplacement(
