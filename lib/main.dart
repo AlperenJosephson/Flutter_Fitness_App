@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart'; // temel widget özelliklerini kullanabilmek için yazıldı
+import 'package:flutter_project_1/screens/calori_screen.dart';
 import 'package:flutter_project_1/screens/favorites_screen.dart';
 import 'package:flutter_project_1/screens/nutrition_screen.dart';
+import 'package:flutter_project_1/screens/profile_screen.dart';
 import 'screens/login_screen.dart'; // Login ekranını içe aktar
 import 'package:flutter_project_1/screens/home_screen.dart';  // /home rotası tamamlanınca home_screen e gitmeye yarar
 import 'screens/exercise_screen.dart';
@@ -29,10 +31,9 @@ class MyApp extends StatelessWidget { // stateless widgetlar burada olacaklar
         '/exercises': (context) => const ExerciseScreen(),
         '/favorites': (context) => FavoritesScreen(userEmail: userSession.email!),
         '/nutrition': (context) => const NutritionScreen(),
-        //'/profile': (context) => const ProfileScreen(),
-
+        '/profile': (context) => const ProfileScreen(),
+        '/calorie': (context) => const CalorieScreen(),
       },
-    
     );
   }
 }

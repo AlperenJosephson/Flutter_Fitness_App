@@ -75,6 +75,14 @@ class HomeScreen extends StatelessWidget {
                 Navigator.pushNamed(context, '/profile');
               },
             ),
+
+            ListTile(
+              leading: const Icon(Icons.local_dining),
+              title: const Text('Kalori Hesaplama'),
+              onTap: () {
+                Navigator.pushNamed(context, '/calorie');
+              },
+            ),
           ],
         ),
       ),
