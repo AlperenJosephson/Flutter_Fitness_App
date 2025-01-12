@@ -13,7 +13,7 @@ class ExerciseScreen extends StatefulWidget {
 
 class _ExerciseScreenState extends State<ExerciseScreen> {
   final String apiUrl = "https://api.api-ninjas.com/v1/exercises";
-  final String apiKey = "dqOSOqDyEDvX/mjtOSnamw==9CWVoGJdRSiPYYDm";
+  final String apiKey = ""; // Güvenlik amacıyla APİ Key SİLİNDİ
 
   final DatabaseHelper _dbHelper = DatabaseHelper();
   List<dynamic> exercises = [];
